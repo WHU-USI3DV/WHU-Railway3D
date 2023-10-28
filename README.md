@@ -7,7 +7,13 @@ Point cloud semantic segmentation (PCSS) shows great potential in generating acc
 
 WHU-Railway3D is categorized into urban, rural, and plateau railways based on scene complexity and semantic class distribution. The dataset spans 30 km with 4 billion points labeled into 11 classes (e.g., rails, overhead lines). In addition to 3D coordinates, WHU-Railway3D provides rich attribute information such as reflected intensity and number of returns. Cutting-edge methods are extensively evaluated on the dataset, followed by in-depth analysis. Lastly, key challenges and potential future work are identified to stimulate further innovative research.
 
-**[[Download Link](https://forms.gle/ReGwd8EyeC7rH4J37)]** **Coming soon!** 
+## 📌 Download
+
+Please fill out this [**Data Request**](https://forms.gle/HswKqzUWRuG4UQMZ6) if you have access to google forms. 
+
+If not, please fill out this [**one**](https://wj.qq.com/s2/13387420/ac80) (alternative link for Chinese users). 
+
+Download links will be sent automatically after completing the application.
 
 Main web page of our group : http://3s.whu.edu.cn/ybs/index.htm
 
@@ -19,7 +25,7 @@ Our dataset is categorized based on scene complexity and category distribution p
 
 <img src="images/Fig-1-Overview.png" alt="Network" style="zoom:100%;" />
 
-<img src="images/Fig-2-Display.png" alt="Network" style="zoom:100%;" />
+
 
 <img src="images/Table-1-Comparison.png" alt="Network" style="zoom:100%;" />
 
@@ -29,7 +35,7 @@ Our dataset is categorized based on scene complexity and category distribution p
 - The rural railway dataset was collected using an MLS system equipped with two [HiScan-Z LiDAR sensors](https://www.zhdgps.com/detail/car_portable-HiScan-Z) in a field area, covering a road length of approximately 10.6 km. This dataset presents various challenges, including occlusion caused by vegetation and terrain variations.
 - The plateau railway dataset was obtained using a [Rail Mobile Measurement System](http://www.hirail.cn/product_detail/id/7.html) (rMMS) equipped with a 32-line LiDAR sensor in a plateau zone, spanning a road length of approximately 10.4 km. The plateau railway dataset poses a challenge due to the imbalance in the distribution of point numbers among different categories, requiring strategies to address the issue of balanced learning for diverse modalities.
 
-<img src="images/Table-2-DataDescription.png" alt="Network" style="zoom:60%;" />
+<img src="images/Table-2-DataDescription.png" alt="Network" style="zoom:50%;" />
 
 ### 1.3 Semantic Annotations
 
