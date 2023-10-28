@@ -23,11 +23,11 @@ Main web page of our group : http://3s.whu.edu.cn/ybs/index.htm
 
 Our dataset is categorized based on scene complexity and category distribution patterns into urban railways, rural railways, and plateau railways. Each category covers a distance of approximately 10 kilometers, resulting in a dataset consisting of about 4 billion data points. Each point is labeled under one of the 11 categories, such as rails, masts, overhead lines, and fences.
 
-<img src="images/Fig-1-Overview.png" alt="Network" style="zoom:100%;" />
+<img src="images/Fig1-Overview.png" alt="Network" style="zoom:100%;" />
 
 
 
-<img src="images/Table-1-Comparison.png" alt="Network" style="zoom:100%;" />
+<img src="images/Table1-Comparison.png" alt="Network" style="zoom:100%;" />
 
 ### 1.2 Data Collection
 
@@ -35,7 +35,7 @@ Our dataset is categorized based on scene complexity and category distribution p
 - The rural railway dataset was collected using an MLS system equipped with two [HiScan-Z LiDAR sensors](https://www.zhdgps.com/detail/car_portable-HiScan-Z) in a field area, covering a road length of approximately 10.6 km. This dataset presents various challenges, including occlusion caused by vegetation and terrain variations.
 - The plateau railway dataset was obtained using a [Rail Mobile Measurement System](http://www.hirail.cn/product_detail/id/7.html) (rMMS) equipped with a 32-line LiDAR sensor in a plateau zone, spanning a road length of approximately 10.4 km. The plateau railway dataset poses a challenge due to the imbalance in the distribution of point numbers among different categories, requiring strategies to address the issue of balanced learning for diverse modalities.
 
-<img src="images/Table-2-DataDescription.png" alt="Network" style="zoom:50%;" />
+<img src="images/Table2-DataDescription.png" alt="Network" style="zoom:50%;" />
 
 ### 1.3 Semantic Annotations
 
@@ -51,7 +51,7 @@ Our dataset is categorized based on scene complexity and category distribution p
 - Support devices: devices for supporting power lines, as shown in Fig. 3 (c).
 - Others: Other unclassified objects, such as pedestrians, vehicles, etc.
 
-<img src="images/Fig-3-Categories.png" alt="Network" style="zoom:100%;" />
+<img src="images/Fig3-Categories.png" alt="Network" style="zoom:100%;" />
 
 
 
@@ -59,25 +59,25 @@ Our dataset is categorized based on scene complexity and category distribution p
 
 To ensure compatibility with modern GPUs for deep learning-based semantic segmentation tasks, the annotated dataset needed to be partitioned into smaller chunks. The point cloud partitioning process took into careful consideration the variations in point density and scene complexity across different railway scenes, leading to the adoption of specific strategies. In the case of the urban railway scene, 40 tiles were randomly allocated, with 24 tiles assigned for training, 8 tiles for validation, and 8 tiles for testing. Similarly, for the rural railway scene, 60 tiles were divided, consisting of 36 tiles for training, 12 tiles for validation, and 12 tiles for testing. As for the plateau railway scene, a total of 40 tiles were created, with 24 tiles for training, 8 tiles for validation, and 8 tiles for testing. Overall, for each railway scene dataset, the training data accounts for approximately 60%, the validation data accounts for about 20%, and the testing data accounts for about 20%.
 
-<img src="images/Fig-4-Statistics.png" alt="Network" style="zoom:50%;" />
+<img src="images/Fig4-Statistics.png" alt="Network" style="zoom:50%;" />
 
 ## ✨ Benchmark
 
 We carry out an extensive evaluation of numerous cutting-edge methods using our dataset and provide an in-depth analysis of the benchmark results. Lastly, we identify key challenges and potential future work to stimulate further innovative research within this community.
 
-<img src="images/Table-3-Benchmarks.png" alt="Network" style="zoom:100%;" />
+<img src="images/Table3-Benchmarks.png" alt="Network" style="zoom:100%;" />
 
-<img src="images/Fig-5-Visualization.png" alt="Network" style="zoom:100%;" />
+<img src="images/Fig5-Visualization.png" alt="Network" style="zoom:100%;" />
 
-<img src="images/Table-4-Benchmarks-2.png" alt="Network" style="zoom:100%;" />
+<img src="images/Table4-Benchmarks-2.png" alt="Network" style="zoom:100%;" />
 
-<img src="images/Fig-6-Visualization2.png" alt="Network" style="zoom:100%;" />
+<img src="images/Fig6-Visualization2.png" alt="Network" style="zoom:100%;" />
 
-<img src="images/Table-5-Intensity.png" alt="Network" style="zoom:100%;" />
+<img src="images/Table5-Intensity.png" alt="Network" style="zoom:100%;" />
 
-<img src="images/Table-6-Generalization.png" alt="Network" style="zoom:100%;" />
+<img src="images/Table6-Generalization.png" alt="Network" style="zoom:100%;" />
 
-<img src="images/Table-7-SQN.png" alt="Network" style="zoom:100%;" />
+<img src="images/Table7-SQN.png" alt="Network" style="zoom:100%;" />
 
 ## ⭐ Citation
 
