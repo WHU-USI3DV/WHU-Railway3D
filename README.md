@@ -23,7 +23,7 @@ Main web page of our group : http://3s.whu.edu.cn/ybs/index.htm
 
 Our dataset is categorized based on scene complexity and category distribution patterns into urban railways, rural railways, and plateau railways. Each category covers a distance of approximately 10 kilometers, resulting in a dataset consisting of about 4 billion data points. Each point is labeled under one of the 11 categories, such as rails, masts, overhead lines, and fences.
 
-<img src="images/Fig1-Overview.png" alt="Network" style="zoom:100%;" />
+<img src="images/Fig1-Overview_of_WHU-Railway3D.png" alt="Network" style="zoom:100%;" />
 
 
 
