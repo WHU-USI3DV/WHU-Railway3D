@@ -5,7 +5,7 @@
 
 Point cloud semantic segmentation (PCSS) shows great potential in generating accurate 3D semantic maps for digital twin railways. Deep learning-based methods have seen substantial advancements, driven by numerous PCSS datasets. Nevertheless, existing datasets tend to neglect railway scenes, with limitations in scale, categories, and scene diversity. This motivated us to establish WHU-Railway3D, a diverse PCSS dataset specifically designed for railway scenes. 
 
-WHU-Railway3D is categorized into urban, rural, and plateau railways based on scene complexity and semantic class distribution. The dataset spans 30 km with 4 billion points labeled into 11 classes (e.g., rails, overhead lines). In addition to 3D coordinates, WHU-Railway3D provides rich attribute information such as reflected intensity and number of returns. Cutting-edge methods are extensively evaluated on the dataset, followed by in-depth analysis. Lastly, key challenges and potential future work are identified to stimulate further innovative research.
+WHU-Railway3D is categorized into urban, rural, and plateau railways based on scene complexity and semantic class distribution. The dataset spans 30 km with 3.8 billion points labeled into 11 classes (e.g., rails, overhead lines). In addition to 3D coordinates, WHU-Railway3D provides rich attribute information such as reflected intensity and number of returns. Cutting-edge methods are extensively evaluated on the dataset, followed by in-depth analysis. Lastly, key challenges and potential future work are identified to stimulate further innovative research.
 
 ## 📌 Download
 
@@ -21,11 +21,11 @@ Main web page of our group : http://3s.whu.edu.cn/ybs/index.htm
 
 ### 1.1 Overview
 
-Our dataset is categorized based on scene complexity and category distribution patterns into urban railways, rural railways, and plateau railways. Each category covers a distance of approximately 10 kilometers, resulting in a dataset consisting of about 4 billion data points. Each point is labeled under one of the 11 categories, such as rails, masts, overhead lines, and fences.
+Our dataset is categorized based on scene complexity and category distribution patterns into urban railways, rural railways, and plateau railways. Each category covers a distance of approximately 10 kilometers, resulting in a dataset consisting of about 3.8 billion data points. Each point is labeled under one of the 11 categories, such as rails, track bed, masts, overhead lines, and fences.
 
 <img src="images/Fig1-Overview_of_WHU-Railway3D.png" alt="Network" style="zoom:100%;" />
 
-
+<img src="images/Fig2-Display.png" alt="Network" style="zoom:100%;" />
 
 <img src="images/Table1-Comparison.png" alt="Network" style="zoom:100%;" />
 
@@ -39,21 +39,29 @@ Our dataset is categorized based on scene complexity and category distribution p
 
 ### 1.3 Semantic Annotations
 
-- Rails: tracks of the train, as shown in Fig. 3 (g).
-- Bed: the section between tracks, including sleepers, ballast, etc. Refer to Fig. 3 (h).
-- Overhead lines: including power lines and catenary lines, as shown in Fig. 3 (a).
-- Fences: including fences and sound insulation panels.
-- Vegetation: including trees and grass, as shown in Fig. 3 (f)
-- Poles: including utility poles and other pole-like objects, an example can be found in Fig. 3 (i).
-- Towers: including masts and electricity transmission towers near the railways, refer to Fig. 3(b).
-- Ground: including cement and rough ground.
-- Buildings: including houses, high-rise buildings, warehouses, etc. Refer to Fig. 3 (d).
-- Support devices: devices for supporting power lines, as shown in Fig. 3 (c).
-- Others: Other unclassified objects, such as pedestrians, vehicles, etc.
+- Rails: hot-rolled steel with a cross-section approximate to an I-beam, providing a reliable rolling surface for train wheels to travel on, as shown in Fig. 3 (a).
+
+- Track bed: the section between rails, including sleepers, ballast, etc. Refer to Fig. 3 (a).
+
+- Masts: load-bearing steel structures for the overhead line system and supporting devices, as shown in Fig. 3 (b).
+
+- Support devices: including support arms, strings of suspended insulators, and other supporting equipment used to secure overhead lines in the specified position and height, as shown in Fig. 3 (b).
+
+- Overhead lines: a specialized form of transmission line erected above the railway line to supply power to electric locomotives, as shown in Fig. 3 (b).
+
+- Fences: serve as demarcation or protective barriers for railway tracks, aiming to prevent trespassing and vandalism, as shown in Fig. 3 (e).
+
+- Poles: utility poles and other pole-like objects, as shown in Fig. 3 (c).
+
+- Vegetation: including trees and plants, refer to Fig. 3 (e).
+
+- Buildings: structures or constructions surrounding the railway, including low-rise houses, tall buildings, warehouses, etc. Refer to Fig. 3 (d).
+
+- Ground: concrete pavement or bare ground.
+
+- Others: Other unclassified objects, such as pedestrians, vehicles, and bridges, as shown in Fig. 3 (f).
 
 <img src="images/Fig3-Categories.png" alt="Network" style="zoom:100%;" />
-
-
 
 ### 1.4 Statistics
 
@@ -61,21 +69,33 @@ To ensure compatibility with modern GPUs for deep learning-based semantic segmen
 
 <img src="images/Fig4-Statistics.png" alt="Network" style="zoom:50%;" />
 
+
+
 ## ✨ Benchmark
 
 We carry out an extensive evaluation of numerous cutting-edge methods using our dataset and provide an in-depth analysis of the benchmark results. Lastly, we identify key challenges and potential future work to stimulate further innovative research within this community.
+
+- **Table 1**: Quantitative experimental results of different methods on urban railway dataset.
 
 <img src="images/Table3-Benchmarks.png" alt="Network" style="zoom:100%;" />
 
 <img src="images/Fig5-Visualization.png" alt="Network" style="zoom:100%;" />
 
+- **Table 2**: Quantitative experimental results of KPconv and RandLA-Net on the rural railway dataset and plateau railway dataset.
+
 <img src="images/Table4-Benchmarks-2.png" alt="Network" style="zoom:100%;" />
 
 <img src="images/Fig6-Visualization2.png" alt="Network" style="zoom:100%;" />
 
+- **Table 3**: Experimental results of semantic segmentation before and after the introduction of intensity information in different methods. The asterisks (*) in the upper right corner indicate the results obtained by incorporating intensity information.
+
 <img src="images/Table5-Intensity.png" alt="Network" style="zoom:100%;" />
 
+- **Table 4**: Experimental results on the cross-scene generalization ability of KPConv. U2R represents training on the urban railway dataset and testing on the rural railway dataset. U2P represents training on the urban railway dataset and testing on the plateau railway dataset. R2P represents training on the rural railway dataset and testing on the plateau railway dataset.
+
 <img src="images/Table6-Generalization.png" alt="Network" style="zoom:100%;" />
+
+- **Table 5**: Quantitative results of SQN using different rates of labeled data.
 
 <img src="images/Table7-SQN.png" alt="Network" style="zoom:100%;" />
 
