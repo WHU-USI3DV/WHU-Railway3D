@@ -6,7 +6,7 @@ Our primary goal was to develop a dataset specifically tailored for point cloud 
 
 Among them, overpasses, chimneys, transmission towers, and tower cranes have relatively large volumes, resulting in a higher number of points. These objects are more frequently encountered in urban railway scenes, leading to a larger number of points in the "others" class. Statistically, the percentage of points classified as "others" in the three types of railway scenes datasets is 7.3%, 1.1%, and 0.1%, respectively.
 
-<img src="/images/Fig4-Statistics.png" alt="Network" style="zoom:50%;" />
+<img src="/imgs/Fig4-Statistics.png" alt="Network" style="zoom:50%;" />
 
 Fig. 4 The distribution of point numbers among different semantic categories in the WHU-Railway3D dataset.
 
@@ -26,7 +26,7 @@ We chose to include the "others" category in training and evaluation for several
 
 Using KPConv and RandLA-Net as baselines, we conducted experiments on the urban railway dataset to investigate the impact of the "others" category on network segmentation performance. We conducted two sets of repeated experiments on both KPConv and RandLA-Net to mitigate the impact of random errors. As discussed in Section V.A, intensity information enhances overall segmentation performance in fully supervised networks. Hence, both networks were trained using coordinate and intensity infomation. KPConv was trained for 200 epochs until convergence, while RandLA-Net was trained for 100 epochs. Network hyperparameters were consistent with those outlined in Section IV-D. Quantitative results are presented in the table below. The asterisk (*) in the upper right corner indicates that "others" category are not involved in the training and testing phase.
 
-<img src="/images/Table8-others.png" alt="Network" style="zoom:100%;" />
+<img src="/imgs/Table8-others.png" alt="Network" style="zoom:100%;" />
 
 Table 1: Quantitative experimental results obtained when the “others” category is not involved in training and testing phase
 
@@ -38,7 +38,7 @@ According to Table 1, for KPConv, the absence of the "others" category leads to 
 
 So, what would be the actual segmentation performance of models trained without including the "others" category in practical applications? To investigate this, we conducted another experiment, wherein we only ignored the "others" category during training but did not remove points labeled as "others" from the test set. The experimental results are presented in Table 2. The asterisk (*) in the upper right corner denotes that the results were obtained when excluding the "others" category solely during the training phase. 
 
-<img src="/images/Table9-others2.png" alt="Network" style="zoom:100%;" />
+<img src="/imgs/Table9-others2.png" alt="Network" style="zoom:100%;" />
 
 Table 2: Quantitative experimental results obtained when excluding the "others" category only during the training phase.
 
