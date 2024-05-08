@@ -5,7 +5,7 @@
 
 Point cloud semantic segmentation (PCSS) shows great potential in generating accurate 3D semantic maps for digital twin railways. Deep learning-based methods have seen substantial advancements, driven by numerous PCSS datasets. Nevertheless, existing datasets tend to neglect railway scenes, with limitations in scale, categories, and scene diversity. This motivated us to establish WHU-Railway3D, a diverse PCSS dataset specifically designed for railway scenes. 
 
-WHU-Railway3D is categorized into urban, rural, and plateau railways based on scene complexity and semantic class distribution. The dataset spans 30 km with 3.8 billion points labeled into 11 classes (e.g., rails, overhead lines). In addition to 3D coordinates, WHU-Railway3D provides rich attribute information such as reflected intensity and number of returns. Cutting-edge methods are extensively evaluated on the dataset, followed by in-depth analysis. Lastly, key challenges and potential future work are identified to stimulate further innovative research.
+WHU-Railway3D is categorized into urban, rural, and plateau railways based on scene complexity and semantic class distribution. The dataset spans 30 km with 3.9 billion points labeled into 11 classes (e.g., rails, overhead lines). In addition to 3D coordinates, WHU-Railway3D provides rich attribute information such as reflected intensity and number of returns. Cutting-edge methods are extensively evaluated on the dataset, followed by in-depth analysis. Lastly, key challenges and potential future work are identified to stimulate further innovative research.
 
 ## 📌 Download
 
@@ -21,7 +21,7 @@ Main web page of our group : http://3s.whu.edu.cn/ybs/index.htm
 
 ### 1.1 Overview
 
-Our dataset is categorized based on scene complexity and category distribution patterns into urban railways, rural railways, and plateau railways. Each category covers a distance of approximately 10 kilometers, resulting in a dataset consisting of about 3.8 billion data points. Each point is labeled under one of the 11 categories, such as rails, track bed, masts, overhead lines, and fences.
+Our dataset is categorized based on scene complexity and category distribution patterns into urban railways, rural railways, and plateau railways. Each category covers a distance of approximately 10 kilometers, resulting in a dataset consisting of about 3.9 billion data points. Each point is labeled under one of the 11 categories, such as rails, track bed, masts, overhead lines, and fences.
 
 <img src="images/Fig1-Overview_of_WHU-Railway3D.png" alt="Network" style="zoom:100%;" />
 
@@ -59,7 +59,7 @@ Our dataset is categorized based on scene complexity and category distribution p
 
 - Ground: concrete pavement or bare ground.
 
-- Others: Other unclassified objects, such as pedestrians, vehicles, and bridges, as shown in Fig. 3 (f).
+- Others: other objects such as overpasses, chimneys, transmission towers, tower cranes, vehicles, and pedestrians, as shown in Fig. 3 (f).
 
 <img src="images/Fig3-Categories.png" alt="Network" style="zoom:100%;" />
 
@@ -73,7 +73,7 @@ To ensure compatibility with modern GPUs for deep learning-based semantic segmen
 
 ## ✨ Benchmark
 
-We carry out an extensive evaluation of numerous cutting-edge methods using our dataset and provide an in-depth analysis of the benchmark results. Lastly, we identify key challenges and potential future work to stimulate further innovative research within this community.
+We conduct a extensive evaluation of various state-of-the-art methods using our dataset. Experiment code, models, and results will be made publicly accessible to ensure comprehensive details for accurate replication and validation of our findings.
 
 - **Table 1**: Quantitative experimental results of different methods on urban railway dataset.
 
@@ -105,7 +105,14 @@ If you find our work useful in your research, please consider citing:
 
 ```
 @article{
+Under Review
+}
 
+@misc{WHU-Railway3D,
+    title={WHU-Railway3D: A Diverse Dataset and Benchmark for Railway Point Cloud Semantic Segmentation},
+    author={Urban Spatial Intelligence Research Group at LIESMARS, Wuhan University},
+    howpublished={\url{https://github.com/WHU-USI3DV/WHU-Railway3D}},
+    year={2023}
 }
 ```
 
