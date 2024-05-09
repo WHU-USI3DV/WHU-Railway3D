@@ -1,7 +1,8 @@
 import warnings
 from utils.helper_tool import ConfigRailway3D as cfg
 from RandLANet import Network, compute_loss, compute_acc, IoUCalculator
-from Railway3D_dataset import Railway3D, Railway3DSampler
+from Railway3D_dataset import Railway3D, Railway3DSampler # when training with xyz + intensity
+# from Railway3D_dataset_xyz import Railway3D, Railway3DSampler # when training with only xyz
 import numpy as np
 import os, argparse
 

@@ -5,7 +5,7 @@
      
 * Make sure <a href="https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html">CUDA</a>  and <a href="https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html">cuDNN</a> are installed. One configuration has been tested: 
      - PyTorch 1.4.0, CUDA 10.1 and cuDNN 7.6
-     
+
 * Ensure all python packages are installed :
 
           sudo apt update
