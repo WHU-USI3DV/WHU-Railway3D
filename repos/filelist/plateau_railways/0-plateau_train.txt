@@ -1,0 +1,12 @@
+Tibet-0.ply
+Tibet-1.ply
+Tibet-3.ply
+Tibet-5.ply
+Tibet-8.ply
+Tibet-10.ply
+Tibet-12.ply
+Tibet-13.ply
+Tibet-14.ply
+Tibet-15.ply
+Tibet-17.ply
+Tibet-18.ply

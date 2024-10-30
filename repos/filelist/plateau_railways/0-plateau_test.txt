@@ -1,0 +1,4 @@
+Tibet-2.ply
+Tibet-7.ply
+Tibet-11.ply
+Tibet-19.ply
