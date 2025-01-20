@@ -99,8 +99,8 @@ class DataProcessing:
     @staticmethod
     def knn_search(support_pts, query_pts, k):
         """
-        :param support_pts: points you have, B*N1*3 在这些点上搜索
-        :param query_pts: points you want to know the neighbour index, B*N2*3 以这些点为中心做KNN
+        :param support_pts: points you have, B*N1*3 , search on these points
+        :param query_pts: points you want to know the neighbour index, B*N2*3 , perform KNN on these points
         :param k: Number of neighbours in knn search
         :return: neighbor_idx: neighboring points indexes, B*N2*k
         """

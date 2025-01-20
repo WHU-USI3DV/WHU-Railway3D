@@ -55,7 +55,7 @@ class _ConvBase(nn.Sequential):
     ):
         super().__init__()
 
-        # bias = bias and (not bn)          # 这里改了
+        # bias = bias and (not bn)
         conv_unit = conv(
             in_size,
             out_size,
@@ -65,14 +65,14 @@ class _ConvBase(nn.Sequential):
             bias=bias
         )
         if(init == nn.init.trunc_normal_):
-            init(conv_unit.weight, std=np.sqrt(2 / out_size)) 
+            init(conv_unit.weight, std=np.sqrt(2 / out_size))
         else:
-            init(conv_unit.weight)                  
+            init(conv_unit.weight)
         if bias:
-            nn.init.constant_(conv_unit.bias, 0)    # 所有的卷积的偏置都是0初始化
+            nn.init.constant_(conv_unit.bias, 0)    # Initialize all convolution biases to 0
 
         if bn:
-            if not preact:                          # preact应该是指定在该层网络之前还是之后使用batch normalization
+            if not preact:                          # preact specifies whether to use batch normalization before or after this layer
                 bn_unit = batch_norm(out_size)
             else:
                 bn_unit = batch_norm(in_size)
@@ -139,7 +139,7 @@ class Conv1d(_ConvBase):
             padding: int = 0,
             activation=nn.LeakyReLU(negative_slope=0.2, inplace=True),
             bn: bool = False,
-            # init=nn.init.kaiming_normal_,                                   # 何凯明提出的一个初始化方法(换成原文的初始化)
+            # init=nn.init.kaiming_normal_,    # init method proposed by Kaiming He.
             init = nn.init.xavier_normal_,
             bias: bool = True,
             preact: bool = False,
@@ -175,7 +175,7 @@ class Conv2d(_ConvBase):
             kernel_size: Tuple[int, int] = (1, 1),
             stride: Tuple[int, int] = (1, 1),
             padding: Tuple[int, int] = (0, 0),
-            activation=nn.LeakyReLU(negative_slope=0.2, inplace=True),            
+            activation=nn.LeakyReLU(negative_slope=0.2, inplace=True),
             bn: bool = False,
             # init=nn.init.kaiming_normal_,
             init = nn.init.trunc_normal_,

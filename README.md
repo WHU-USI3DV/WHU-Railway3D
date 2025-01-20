@@ -15,7 +15,49 @@ Download links will be sent automatically after completing the application.
 
 Main web page of our group : http://3s.whu.edu.cn/ybs/index.htm
 
-## 📌 Dataset
+## ✅ Evaluation
+
+We provide online benchmark platforms for evaluating PCSS models on three different railway scenes:
+
+- [Urban Railway Benchmark](https://www.codabench.org/competitions/5138/)
+- [Rural Railway Benchmark](https://www.codabench.org/competitions/5140/)
+- [Plateau Railway Benchmark](https://www.codabench.org/competitions/5142/)
+
+<details>
+<summary><b>📤 Submission Guidelines</b></summary>
+
+To evaluate your model:
+
+1. Generate prediction files for the test set:
+   - Each prediction file should be saved as a .npy file in uint8 format
+   - File names must match the original ply file names (e.g., L5-1-M01-002.npy)
+   - Each file contains per-point semantic predictions (one label per line)
+   - Labels should be integers from 0-10 corresponding to the 11 classes
+
+2. Create a submission zip file with the following structure:
+   ```
+   submission.zip
+   ├── xxx.npy
+   ├── xxx.npy
+   ├── xxx.npy
+   ├── xxx.npy
+   └── ...
+   ```
+
+3. Submit your zip file to the corresponding benchmark platform.
+
+4. The platform will automatically calculate and display:
+   - Mean Intersection over Union (mIoU)
+   - Per-class IoU scores
+   - Overall Accuracy (OA)
+
+**Notes**
+- Test set ground truth labels are not publicly available
+- Evaluation is performed on the [codabench server](https://www.codabench.org/) to ensure fair comparison
+
+</details>
+
+## ✨ Dataset
 
 ### 1.1 Overview
 
@@ -69,7 +111,7 @@ To ensure compatibility with modern GPUs for deep learning-based semantic segmen
 
 
 
-## ✨ Benchmark
+## 📊 Benchmark
 
 We conduct a extensive evaluation of various state-of-the-art methods using our dataset. Experiment code, models, and results will be made publicly accessible to ensure comprehensive details for accurate replication and validation of our findings.
 

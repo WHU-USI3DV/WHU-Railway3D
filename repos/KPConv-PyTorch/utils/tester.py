@@ -46,6 +46,19 @@ from sklearn.metrics import confusion_matrix
 #           Tester Class
 #       \******************/
 #
+railway3d_label_to_color = np.asarray([
+    [154,107,56]   ,
+    [160,112,160]  ,
+    [251,143,49]   ,
+    [62,170,163]   ,
+    [229,202,63]   ,
+    [101,101,206]  ,
+    [180,47,174]   ,
+    [166,255,64]   ,
+    [253,51,103]   ,
+    [154,194,231]  ,
+    [218,219,220]
+])
 
 
 class ModelTester:
@@ -203,10 +216,8 @@ class ModelTester:
                 makedirs(test_path)
             if not exists(join(test_path, 'predictions')):
                 makedirs(join(test_path, 'predictions'))
-            if not exists(join(test_path, 'probs')):
-                makedirs(join(test_path, 'probs'))
-            if not exists(join(test_path, 'potentials')):
-                makedirs(join(test_path, 'potentials'))
+            if not exists(join(test_path, 'submission')):
+                makedirs(join(test_path, 'submission'))
         else:
             test_path = None
 
@@ -422,35 +433,23 @@ class ModelTester:
 
                         # Get the predicted labels
                         preds = test_loader.dataset.label_values[np.argmax(proj_probs[i], axis=1)].astype(np.int32)
+                        preds = np.array(preds).reshape(-1, 1)
 
-                        # Save plys
+                        cloud_colors = railway3d_label_to_color[preds.astype(np.uint8)]
+                        cloud_colors = cloud_colors.reshape(np.size(preds, 0), 3)
+
                         cloud_name = file_path.split('/')[-1]
-                        test_name = join(test_path, 'predictions', cloud_name)
-                        write_ply(test_name,
-                                  [points, preds],
-                                  ['x', 'y', 'z', 'preds'])
-                        test_name2 = join(test_path, 'probs', cloud_name)
-                        prob_names = ['_'.join(test_loader.dataset.label_to_names[label].split())
-                                      for label in test_loader.dataset.label_values]
-                        write_ply(test_name2,
-                                  [points, proj_probs[i]],
-                                  ['x', 'y', 'z'] + prob_names)
-
-                        # Save potentials
-                        pot_points = np.array(test_loader.dataset.pot_trees[i].data, copy=False)
-                        pot_name = join(test_path, 'potentials', cloud_name)
-                        pots = test_loader.dataset.potentials[i].numpy().astype(np.float32)
-                        write_ply(pot_name,
-                                  [pot_points.astype(np.float32), pots],
-                                  ['x', 'y', 'z', 'pots'])
-
                         # Save ascii preds
                         if test_loader.dataset.set == 'test':
-                            if test_loader.dataset.name.startswith('Semantic3D'):
-                                ascii_name = join(test_path, 'predictions', test_loader.dataset.ascii_files[cloud_name])
-                            else:
-                                ascii_name = join(test_path, 'predictions', cloud_name[:-4] + '.txt')
+                            ascii_name = join(test_path, 'submission', cloud_name[:-4] + '.npy')
                             np.savetxt(ascii_name, preds, fmt='%d')
+
+                        # Save plys
+                        test_name = join(test_path, 'predictions', cloud_name)
+                        write_ply(test_name,
+                                  [points.astype(np.double), cloud_colors.astype(np.uint8), preds.astype(np.uint8)],
+                                  ['x', 'y', 'z', 'red', 'green', 'blue', 'preds'])
+
 
                     t2 = time.time()
                     print('Done in {:.1f} s\n'.format(t2 - t1))
@@ -610,7 +609,7 @@ class ModelTester:
                             frame_points = np.fromfile(velo_file, dtype=np.float32)
                             frame_points = frame_points.reshape((-1, 4))
                             predpath = join(test_path, pred_folder, filename[:-4] + '.ply')
-                            #pots = test_loader.dataset.f_potentials[s_ind][f_ind]
+
                             pots = np.zeros((0,))
                             if pots.shape[0] > 0:
                                 write_ply(predpath,

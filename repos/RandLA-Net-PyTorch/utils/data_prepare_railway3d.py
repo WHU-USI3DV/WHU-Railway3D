@@ -73,17 +73,13 @@ for pc_path in all_filespath:
     data = read_ply(pc_path)
     xyz = np.vstack((data['x'], data['y'], data['z'])).T
 
-    labels = data['class']
-    labels = labels.reshape(np.size(labels, 0), 1)
-    labels = labels.astype(np.uint8)
+    labels = np.array(data['class']).reshape(-1, 1).astype(np.uint8)
+    intensity = np.array(data['intensity']).reshape(-1, 1).astype(np.float32)
 
-    intensity = data['intensity']
-    intensity = intensity.astype(np.float32)
-    intensity = intensity.reshape(np.size(intensity, 0), 1)
-    print('original_intensity.max = ', intensity.max())
+    # print('original_intensity.max = ', intensity.max())
     intensity[intensity > 800] = 800
     intensity = intensity * 255 / 800
-    print('new_intensity.max = ', intensity.max())
+    # print('new_intensity.max = ', intensity.max())
     intensity = intensity.astype(np.float32)
 
     sub_xyz, sub_intensity, sub_labels = DP.grid_sub_sampling(xyz.astype(np.float32), intensity, labels, cfg.sub_grid_size)
@@ -92,8 +88,8 @@ for pc_path in all_filespath:
     sub_intensity = sub_intensity / 255
 
     sub_ply_file = join(sub_pc_folder, file_name + '.ply')
-    write_ply(sub_ply_file, 
-             [sub_xyz.astype(np.float64), sub_intensity.astype(np.float64), sub_labels.astype(np.uint8)], 
+    write_ply(sub_ply_file,
+             [sub_xyz.astype(np.float64), sub_intensity.astype(np.float64), sub_labels.astype(np.uint8)],
              ['x', 'y', 'z', 'intensity', 'class'])
 
     search_tree = KDTree(sub_xyz, leaf_size=10)

@@ -39,12 +39,6 @@ from utils.tester import ModelTester
 from models.architectures import KPCNN, KPFCNN
 
 
-# ----------------------------------------------------------------------------------------------------------------------
-#
-#           Main Call
-#       \***************/
-#
-
 def model_choice(chosen_log):
 
     ###########################
@@ -78,12 +72,6 @@ def model_choice(chosen_log):
     return chosen_log
 
 
-# ----------------------------------------------------------------------------------------------------------------------
-#
-#           Main Call
-#       \***************/
-#
-
 if __name__ == '__main__':
 
     ###############################
@@ -94,18 +82,12 @@ if __name__ == '__main__':
     #
     #       > 'last_XXX': Automatically retrieve the last trained model on dataset XXX
     #       > '(old_)results/Log_YYYY-MM-DD_HH-MM-SS': Directly provide the path of a trained model
-
-    # chosen_log = 'results/Light_KPFCNN'
-    # chosen_log = '/home/py005/qb/repo/KPConv-PyTorch/results/Log_2023-09-29_10-18-53' # huzontian
+    chosen_log = 'results/Light_KPFCNN'
     # Choose the index of the checkpoint to load OR None if you want to load the current checkpoint
     chkp_idx = -1
 
     # Choose to test on validation or test split
     on_val = True
-
-    # Deal with 'last_XXXXXX' choices
-    # chosen_log = model_choice(chosen_log)
-    chosen_log = '/home/qb/qbdata/repos/rail3d/important/kpconv_models/xyz+intensity+wo_others_Log_2024-04-20_09-02-54'
 
     ############################
     # Initialize the environment
@@ -165,7 +147,7 @@ if __name__ == '__main__':
         set = 'test'
 
     # Initiate dataset
-    print('config.dataset = ', config.dataset)
+    # print('config.dataset = ', config.dataset)
     # exit()
     if config.dataset == 'Railway3D':
         test_dataset = Railway3DDataset(config, set='test', use_potentials=True)

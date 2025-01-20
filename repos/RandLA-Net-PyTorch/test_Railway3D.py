@@ -44,14 +44,16 @@ models_name = models_name.split('/')[-2]
 print('models_name = ', models_name)
 
 LOG_DIR = FLAGS.log_dir
-# LOG_DIR = os.path.join(LOG_DIR, time.strftime('%Y-%m-%d_%H-%M-%S', time.gmtime()))      # 返回的是英国时间
+# LOG_DIR = os.path.join(LOG_DIR, time.strftime('%Y-%m-%d_%H-%M-%S', time.gmtime()))      # Returns UTC time
 LOG_DIR = os.path.join(LOG_DIR, FLAGS.dataset_name)
-if not os.path.exists(LOG_DIR):               
+if not os.path.exists(LOG_DIR):
     print(os.path.join(LOG_DIR))
-    os.makedirs(os.path.join(LOG_DIR)) # 创建多级目录
+    # Create multi-level directories
+    os.makedirs(os.path.join(LOG_DIR))
 log_file_name = 'test_log_Railway3d_'+ models_name + '.txt'
 print('log_file_name = ', log_file_name)
-LOG_FOUT = open(os.path.join(LOG_DIR, log_file_name), 'a')      # 追加写入模式
+# Append write mode
+LOG_FOUT = open(os.path.join(LOG_DIR, log_file_name), 'a')
 
 def log_string(out_str):
     LOG_FOUT.write(out_str + '\n')
@@ -90,19 +92,19 @@ else:
 #################################################   test function   ###########################################
 class ModelTester:
     def __init__(self, dataset):
-
-        self.test_probs = [np.zeros(shape=[l.shape[0], dataset.num_classes], dtype=np.float32) # 初始化一个全零矩阵,用于放入所有场景所有点的预测
+        # Initialize prediction probabilities for each test scene
+        self.test_probs = [np.zeros(shape=[l.shape[0], dataset.num_classes], dtype=np.float32)
                            for l in dataset.input_labels['test']]
 
     def test(self, dataset, num_vote=10):
         # Smoothing parameter for votes
         test_smooth = 0.95
         # Number of points per class in test set
-        val_proportions = np.zeros(dataset.num_classes, dtype=np.float32)      # 长度为11的一个向量
+        val_proportions = np.zeros(dataset.num_classes, dtype=np.float32)      # A vector of length 11 (number of classes)
         i = 0
         for label_val in dataset.label_values:
             if label_val not in dataset.ignored_labels:
-                val_proportions[i] = np.sum([np.sum(labels == label_val) for labels in dataset.test_labels]) # 统计每个类别有多少个点
+                val_proportions[i] = np.sum([np.sum(labels == label_val) for labels in dataset.test_labels]) # Count number of points for each class
                 i += 1
         step_id = 0
         epoch_id = 0
@@ -111,26 +113,28 @@ class ModelTester:
         while last_min < num_vote:
             stat_dict = {}
             net.eval() # set model to eval mode (for bn and dp)
-            iou_calc = IoUCalculator(cfg)    
+            iou_calc = IoUCalculator(cfg)
             for batch_idx, batch_data in enumerate(test_dataloader):
+                # Move data to device
                 for key in batch_data:
                     if type(batch_data[key]) is list:
                         for i in range(len(batch_data[key])):
                             batch_data[key][i] = batch_data[key][i].to(device)
                     else:
                         batch_data[key] = batch_data[key].to(device)
+
                 # Forward pass
                 with torch.no_grad():
                     end_points = net(batch_data)
                 loss, end_points = compute_loss(end_points, cfg, device)
 
-                stacked_probs = end_points['valid_logits']         # logit值，还未经过归一化
+                stacked_probs = end_points['valid_logits']
                 stacked_labels = end_points['valid_labels']
                 point_idx = end_points['input_inds'].cpu().numpy()
                 cloud_idx = end_points['cloud_inds'].cpu().numpy()
 
-                correct = torch.sum(torch.argmax(stacked_probs, axis=1) == stacked_labels)        # 计算准确预测的点数
-                acc = (correct / float(np.prod(stacked_labels.shape))).cpu().numpy()             # 计算正确率
+                correct = torch.sum(torch.argmax(stacked_probs, axis=1) == stacked_labels)        # Calculate number of correctly predicted points
+                acc = (correct / float(np.prod(stacked_labels.shape))).cpu().numpy()             # Calculate accuracy
                 # print('step' + str(step_id) + ' acc:' + str(acc))
                 new_min = np.min(test_dataloader.dataset.min_possibility['test'])
                 log_string('Epoch {:3d}, Step {:3d} end. Min possibility = {:.1f}, acc = {:.2f}'.format(epoch_id, step_id, new_min, acc))
@@ -139,38 +143,42 @@ class ModelTester:
                 stacked_probs = F.softmax(stacked_probs, dim=2).cpu().numpy()
                 stacked_labels = stacked_labels.cpu().numpy()
 
-                for j in range(np.shape(stacked_probs)[0]):     # batchsize次（20次）循环，这个for没看懂，看懂了就知道每个场景下的点云正确率怎么来的了
-                    probs = stacked_probs[j, :, :]      # 取这个batch下第j个的预测结果（分数）
-                    p_idx = point_idx[j, :]             # 取这个batch下第j个的场景中，本次预测结果的点的序号
-                    c_i = cloud_idx[j][0]               # 预测的结果来自第j个场景，c_i是该点云的编号
-                    self.test_probs[c_i][p_idx] = test_smooth * self.test_probs[c_i][p_idx] + (1 - test_smooth) * probs # 相当于是一个互补滤波？ 对预测分数进行更新（累加）这里应该就是vote的核心
+                # Loop batch_size times (20 times) - this loop updates prediction probabilities for each scene
+                for j in range(np.shape(stacked_probs)[0]):
+                    # Get prediction scores for the j-th sample in this batch
+                    probs = stacked_probs[j, :, :]
+                    # Get point indices for predictions in the j-th scene of this batch
+                    p_idx = point_idx[j, :]
+                    # Predictions come from j-th scene, c_i is the point cloud ID
+                    c_i = cloud_idx[j][0]
+                    # Acts like a complementary filter - updates prediction scores (accumulation). This is the core of voting mechanism
+                    self.test_probs[c_i][p_idx] = test_smooth * self.test_probs[c_i][p_idx] + (1 - test_smooth) * probs
                 step_id += 1
 
-
             new_min = np.min(test_dataloader.dataset.min_possibility['test'])
-            print('new_min = ', new_min)
 
             if True:
                 last_min = new_min
-                print('new_min = ', new_min)
 
                 print('Saving clouds')
                 # Show vote results (On subcloud so it is not the good values here)
                 log_string('\nConfusion on sub clouds')
                 confusion_list = []
 
-                num_val = len(dataset.input_labels['test'])           # 验证区域有多少个场景
+                # Number of scenes in validation area
+                num_val = len(dataset.input_labels['test'])
 
                 for i_test in range(num_val):
-                    probs = self.test_probs[i_test]                         # 取出第i_test个场景的vote后的结果
-                    preds = dataset.label_values[np.argmax(probs, axis=1)].astype(np.int32) # 学习这种索引方式，索引中的数组的长度不一定要比被索引的小
-                    labels = dataset.input_labels['test'][i_test]     # 拿到第i_test个场景对应label                      
+                    probs = self.test_probs[i_test]                         # Get voting results for i_test-th scene
+                    preds = dataset.label_values[np.argmax(probs, axis=1)].astype(np.int32) # Note this indexing method - length of indexing array doesn't need to be smaller than indexed array
+                    labels = dataset.input_labels['test'][i_test]     # Get labels for i_test-th scene
                     # Confs
-                    confusion_list += [confusion_matrix(labels, preds, dataset.label_values)]   # 计算该场景下的混淆矩阵（13*13）并追加保存为列表
+                    confusion_list += [confusion_matrix(labels, preds, dataset.label_values)]   # Calculate confusion matrix (13*13) for this scene and append to list
                 # Regroup confusions
-                C = np.sum(np.stack(confusion_list), axis=0).astype(np.float32)                 # 堆叠以后按列加起来 表示整个Area的混淆矩阵
-                # Rescale with the right number of point per class      # 这里应该是根据正确点重新缩放混淆矩阵？
-                C *= np.expand_dims(val_proportions / (np.sum(C, axis=1) + 1e-6), 1)            # 混淆矩阵按行加起来就是每个类别分到的点数
+                # Stack and sum along columns to get confusion matrix for entire area
+                C = np.sum(np.stack(confusion_list), axis=0).astype(np.float32)
+                # Rescale confusion matrix based on correct point proportions
+                C *= np.expand_dims(val_proportions / (np.sum(C, axis=1) + 1e-6), 1)
                 # Compute IoUs
                 IoUs = DP.IoU_from_confusions(C)
                 m_IoU = np.mean(IoUs)
@@ -178,8 +186,6 @@ class ModelTester:
                 for IoU in IoUs:
                     s += '{:5.2f} '.format(100 * IoU)
                 log_string(s + '\n')
-                # if int(np.ceil(new_min)) % 1 == 0:
-                print('int(np.ceil(new_min)) = ', int(np.ceil(new_min)))
                 # if int(np.ceil(new_min)) > 1:
                 if int(np.ceil(new_min)) > 2:
                     # Project predictions
@@ -187,28 +193,27 @@ class ModelTester:
                     proj_probs_list = []
                     for i_val in range(num_val):
                         # Reproject probs back to the evaluations points
-                        proj_idx = dataset.test_proj[i_val]                  # 取出第i_val个场景的原始点编号
-                        probs = self.test_probs[i_val][proj_idx, :]         # 这里的编号很意思，跟之前生成这个test_proj有关。这一步其实就已经完成了采样后点云到原始点云之间的投影（结果预测）
-                        proj_probs_list += [probs]                          # 将原始点云的预测结果保存在这个list中
+                        proj_idx = dataset.test_proj[i_val]                 # Get original point indices for i_val-th scene
+                        probs = self.test_probs[i_val][proj_idx, :]         # These indices are related to previously generated test_proj. This step completes projection of predictions from subsampled to original point cloud
+                        proj_probs_list += [probs]                          # Store predictions for original point cloud in this list
                     # Show vote results
                     log_string('Confusion on full clouds')
                     confusion_list = []
                     for i_test in range(num_val):
                         # Get the predicted labels
-                        preds = dataset.label_values[np.argmax(proj_probs_list[i_test], axis=1)].astype(np.uint8)   # 根据结果（logit）求出最终的分类
+                        preds = dataset.label_values[np.argmax(proj_probs_list[i_test], axis=1)].astype(np.uint8)   # Determine final classification based on logits
+
                         # Confusion
-                        labels = dataset.test_labels[i_test]     # 取出该场景的label
-                        preds = np.array(preds)
-                        preds = preds.reshape(np.shape(preds)[0], 1)
-                        labels = np.array(labels)
-                        labels = labels.reshape(np.shape(labels)[0], 1)
+                        labels = dataset.test_labels[i_test]     # Get labels for this scene
+                        preds = np.array(preds).reshape(-1, 1)
+                        labels = np.array(labels).reshape(-1, 1)
                         assert preds.shape == labels.shape, "preds and labels must have the same shape"
 
-                        acc = np.sum(preds == labels) / len(labels) # 计算准确率
+                        acc = np.sum(preds == labels) / len(labels) # Calculate accuracy
                         log_string(dataset.input_names['test'][i_test] + ' Acc:' + str(acc))
                         error = np.where(labels == preds, 0, 1)
 
-                        confusion_list += [confusion_matrix(labels, preds, dataset.label_values)]   # 计算混淆矩阵
+                        confusion_list += [confusion_matrix(labels, preds, dataset.label_values)]   # Calculate confusion matrix for this scene
 
                         name = dataset.input_names['test'][i_test] + '.ply'
                         test_file_name = dataset.prefix + name
@@ -220,9 +225,16 @@ class ModelTester:
                         save_dir = os.path.join(LOG_DIR, models_name)
                         if not os.path.exists(save_dir):
                             os.makedirs(os.path.join(save_dir))
+                        submission_dir = os.path.join(save_dir, 'submission')
+                        if not os.path.exists(submission_dir):
+                            os.makedirs(submission_dir)
+                        # Save ascii preds
+                        ascii_name = os.path.join(submission_dir, dataset.input_names['test'][i_test] + '.npy')
+                        np.savetxt(ascii_name, preds, fmt='%d')
+
                         pred_file = os.path.join(save_dir, name)
-                        write_ply(pred_file, [xyz.astype(np.double), cloud_colors.astype(np.uint8), 
-                                              labels.astype(np.uint8), preds.astype(np.uint8), error.astype(np.uint8)], 
+                        write_ply(pred_file, [xyz.astype(np.double), cloud_colors.astype(np.uint8),
+                                              labels.astype(np.uint8), preds.astype(np.uint8), error.astype(np.uint8)],
                                               ['x', 'y', 'z', 'red', 'green', 'blue', 'class', 'pred', 'error'])
 
                     # Regroup confusions
@@ -242,7 +254,7 @@ class ModelTester:
             epoch_id += 1
             step_id = 0
             continue
-        
+
         return
 
 
