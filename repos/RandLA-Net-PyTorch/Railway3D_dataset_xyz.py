@@ -125,7 +125,8 @@ class Railway3D(Dataset):
             elif cloud_name in self.test_file_name:
                 cloud_split = 'test'
             else:
-                print('Not in file list: ', file_path)
+                print(f"Warning: File {cloud_name} not found in any split list.")
+                continue
 
             # Name of the input files
             kd_tree_file = join(tree_path, '{:s}_KDTree.pkl'.format(cloud_name))            # Load Sample data
@@ -133,10 +134,7 @@ class Railway3D(Dataset):
 
             data = read_ply(sub_ply_file)                                                   # data['red'] is read as a 1D vector containing all color values
             # sub_colors = np.vstack((data['intensity'], data['intensity'], data['intensity'])).T
-            # print('shape of sub_colors = ', sub_colors.shape)
             sub_colors = np.ones((len(data['intensity']), 3))
-            # print('new shape of sub_colors = ', sub_colors.shape)
-            # exit()
             sub_labels = data['class']
 
             # Read pkl with search tree
@@ -162,7 +160,7 @@ class Railway3D(Dataset):
             cloud_name = file_path.split('/')[-1][:-4]
 
             # Validation projection and labels
-            if file_path in self.val_files:
+            if cloud_name in self.val_file_name:
                 proj_file = join(tree_path, '{:s}_proj.pkl'.format(cloud_name))
                 with open(proj_file, 'rb') as f:
                     proj_idx, labels = pickle.load(f)
@@ -170,7 +168,7 @@ class Railway3D(Dataset):
                 self.val_labels += [labels]
                 print('{:s} done in {:.1f}s'.format(cloud_name, time.time() - t0))
 
-            if file_path in self.test_files:
+            if cloud_name in self.test_file_name:
                 # tree_path = join(self.path, 'input_{:.3f}'.format(sub_grid_size))
                 proj_file = join(tree_path, '{:s}_proj.pkl'.format(cloud_name))
                 with open(proj_file, 'rb') as f:

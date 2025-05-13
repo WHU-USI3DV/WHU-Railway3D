@@ -114,12 +114,15 @@ class Railway3D(Dataset):
             t0 = time.time()
             cloud_name = file_path.split('/')[-1][:-4]
             print('Load_pc_' + str(i) + ': ' + cloud_name)
-            if file_path in self.val_files:
-                cloud_split = 'validation'
-            elif file_path in self.train_files:
+            if cloud_name in self.train_file_name:
                 cloud_split = 'training'
-            else:
+            elif cloud_name in self.val_file_name:
+                cloud_split = 'validation'
+            elif cloud_name in self.test_file_name:
                 cloud_split = 'test'
+            else:
+                print(f"Warning: File {cloud_name} not found in any split list.")
+                continue
 
             # Name of the input files
             kd_tree_file = join(tree_path, '{:s}_KDTree.pkl'.format(cloud_name))            # Load sampled data
@@ -150,7 +153,7 @@ class Railway3D(Dataset):
             cloud_name = file_path.split('/')[-1][:-4]
 
             # Validation projection and labels
-            if file_path in self.val_files:
+            if cloud_name in self.val_file_name:
                 proj_file = join(tree_path, '{:s}_proj.pkl'.format(cloud_name))
                 with open(proj_file, 'rb') as f:
                     proj_idx, labels = pickle.load(f)
@@ -158,7 +161,7 @@ class Railway3D(Dataset):
                 self.val_labels += [labels]
                 print('{:s} done in {:.1f}s'.format(cloud_name, time.time() - t0))
 
-            if file_path in self.test_files:
+            if cloud_name in self.test_file_name:
                 # tree_path = join(self.path, 'input_{:.3f}'.format(sub_grid_size))
                 proj_file = join(tree_path, '{:s}_proj.pkl'.format(cloud_name))
                 with open(proj_file, 'rb') as f:

@@ -207,7 +207,7 @@ def header_properties(field_list, field_names):
     # Properties lines
     i = 0
     for fields in field_list:
-        for field in fields.T:                                  # 这个field是从二维矩阵fields.T上扣下来的一个向量,循环一共执行3+3+1=7次
+        for field in fields.T:
             lines.append('property %s %s' % (field.dtype.name, field_names[i]))
             i += 1
 
@@ -248,11 +248,11 @@ def write_ply(filename, field_list, field_names, triangular_faces=None):
     """
 
     # Format list input to the right form
-    field_list = list(field_list) if (type(field_list) == list or type(field_list) == tuple) else list((field_list,))   # 转换为数组
+    field_list = list(field_list) if (type(field_list) == list or type(field_list) == tuple) else list((field_list,))
     for i, field in enumerate(field_list):
-        if field.ndim < 2:                                  # 数组维度(等于2的时候不处理)
-            field_list[i] = field.reshape(-1, 1)            # 将本来一维的向量也转换为二维的数组，虽然这个二维数组也只有一列
-        if field.ndim > 2:                                  # 大于2报错
+        if field.ndim < 2:
+            field_list[i] = field.reshape(-1, 1)
+        if field.ndim > 2:
             print('fields have more than 2 dimensions')
             return False    
 
@@ -269,17 +269,17 @@ def write_ply(filename, field_list, field_names, triangular_faces=None):
         return False
 
     # Add extension if not there
-    if not filename.endswith('.ply'):               
+    if not filename.endswith('.ply'):
         filename += '.ply'
 
     # open in text mode to write the header
-    with open(filename, 'w') as plyfile:            # 创建一个文件
+    with open(filename, 'w') as plyfile:
 
         # First magical word
-        header = ['ply']       # 定义了一个列表                         
+        header = ['ply']
 
         # Encoding format
-        header.append('format binary_' + sys.byteorder + '_endian 1.0')     # 添加字节存储顺序信息
+        header.append('format binary_' + sys.byteorder + '_endian 1.0')
 
         # Points properties description
         header.extend(header_properties(field_list, field_names))
@@ -353,4 +353,3 @@ def describe_element(name, df):
             element.append('property ' + f + ' ' + df.columns.values[i])
 
     return element
-
