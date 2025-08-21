@@ -153,7 +153,7 @@ if __name__ == '__main__':
         test_dataset = Railway3DDataset(config, set='test', use_potentials=True)
         print('test_dataset = ', test_dataset)
         test_sampler = Railway3DSampler(test_dataset)
-        collate_fn = MydataCollate
+        collate_fn = Railway3DCollate
     else:
         raise ValueError('Unsupported dataset : ' + config.dataset)
 
